@@ -76,8 +76,30 @@ app.get('/companies/:company_id', function(request, response) {
 });
 
 app.put('/companies/:company_id', function(request, response) {
-    
-})
+    Companys.findById(require.params.company_id, function(error, company) {
+        if (error) response.send(error);
+
+        //undate the company information
+        company.name = request.body.company.name;
+        company.symbolURL = request.body.company.symbolURL;
+        company.openPrice = request.body.company.openPrice;
+        company.currentPrice = request.body.company.currentPrice;
+        company.changeValue = request.body.company.changeValue;
+        company.changeIcon = request.body.company.changeIcon;
+        company.changeDirection = request.body.company.changeDirection;
+        company.shareVolume = request.body.company.shareVolume;
+        company.buyOrders = request.body.company.buyOrders;
+        company.saleOrders = request.body.company.saleOrders;
+        company.transaction = request.body.company.transactions;
+
+        // save the company information
+        company.save(function(error) {
+            if (error) response.send(error);
+            response.status(201).json({companies: company});
+        });
+        
+    });
+});
 
 /*
 var Posts = mongoose.model('Posts', postsSchema);
