@@ -130,7 +130,7 @@ app.get('/buyOrders', function (request, response) {
 });
 
 // Get all teh sale orders
-app.get('saleOrders', function (request, response) {
+app.get('/saleOrders', function (request, response) {
     SaleOrders.find(function (error, saleOrders) {
         if (error) response.send(error);
         response.json({saleOrders: saleOrders});
@@ -138,13 +138,35 @@ app.get('saleOrders', function (request, response) {
 });
 
 // Create a buy orders
-app.post('buyOrders', function (request, response) {
+app.post('/buyOrders', function (request, response) {
     var buyOrder = new BuyOrders (request.body.buyOrder);
 
     // save the buyOrder
     buyOrder.save(function (error) {
         if (error) response.send(error);
         response.status(201).json({BuyOrders: buyOrder});
+    });
+});
+
+// Create a sale orders
+app.post('/saleOrders', function (request, response) {
+    var saleOrder = new SaleOrders (request.body.saleOrder);
+
+    // save the buyOrder
+    saleOrder.save(function (error) {
+        if (error) response.send(error);
+        response.status(201).json({SaleOrders: saleOrder});
+    });
+});
+
+// Create a transcation
+app.post('/transcations', function (request, response) {
+    var transcation = new Transactions (request.body.saleOrder);
+
+    // save the buyOrder
+    transaction.save(function (error) {
+        if (error) response.send(error);
+        response.status(201).json({Transactions: transaction});
     });
 });
 
