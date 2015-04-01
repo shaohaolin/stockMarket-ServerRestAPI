@@ -85,6 +85,7 @@ StockExchangeMarket.PlaceBidOrderController = Ember.ObjectController.extend({
                         saleOrders.forEach(function (order) {
                             if (order.get('timeStamp') === saleOrder.get('timeStamp')) {
                                 order.set('size', remainingSize);
+                                order.save();
                                 return true;
                             }
                         });

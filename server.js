@@ -1,4 +1,4 @@
-ar express = require('express');
+var express = require('express');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
@@ -21,7 +21,7 @@ var buyOrderSchema = mongoose.Schema({
     timeStamp: Date,
     size: Number,
     price: Number,
-    company: { type: companySchema }
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companys' }
 });
 
 // define saleOrder Schema
@@ -29,7 +29,7 @@ var saleOrderSchema = mongoose.Schema({
     timeStamp: Date,
     size: Number,
     price: Number,
-    company: { type: companySchema }
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companys'}
 });
 
 //define transaction Schema
@@ -37,7 +37,7 @@ var transactionSchema = mongoose.Schema({
     timeStamp: Date,
     size: Number,
     price: Number,
-    company: { type: companySchema }
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companys' }
 });
 
 //  define company Schema
@@ -56,18 +56,37 @@ var companySchema = mongoose.Schema({
     transactions: [transactionSchema] //to save the transaction when we find a deal
 });
 
-// compile company model - instances of models are document.
-// Now I have companys model or document
-// A model is an object that gives you easy access to a named collection.
-var Companys = mongoose.model('Companys', companySchema);
+/* compile company model - instances of models are document.
+ * Now I have companys model or document
+ * A model is an object that gives you easy access to a named collection.
+ */ 
+var Companies = mongoose.model('Companies', companySchema);
+var BuyOrders = mongoose.model('BuyOrders', buyOrderSchema);
+var SaleOrders = mongoose.model('SaleOrders', saleOrderSchema);
+var Transactions = mongoose.model('Transactions', transactionSchema);
 
+// compile buyOrders model
+
+// Get all the companies
 app.get('/companies', function (request, response) {
-    Companys.find(function (error, companies) {
+    Companies.find(function (error, companies) {
         if (error) response.send(error);
         response.json({companies: companies});
     });
 });
 
+// Create a company
+app.post('/companies', function (request, response) {
+    var company = new Companies (request.body.company);
+
+    // save the company
+    company.save(function (error) {
+        if (error) response.send(error);
+        response.status(201).json({Companies: company});
+    });
+});
+
+// Get a company with matching company_id
 app.get('/companies/:company_id', function(request, response) {
     Companys.findById(request.params.company_id, function (error, company) {
         if (error || !company) response.send(error);
@@ -75,8 +94,9 @@ app.get('/companies/:company_id', function(request, response) {
     });
 });
 
+// Update a company with new info.
 app.put('/companies/:company_id', function(request, response) {
-    Companys.findById(require.params.company_id, function(error, company) {
+    Companies.findById(request.params.company_id, function(error, company) {
         if (error) response.send(error);
 
         //undate the company information
@@ -97,7 +117,34 @@ app.put('/companies/:company_id', function(request, response) {
             if (error) response.send(error);
             response.status(201).json({companies: company});
         });
-        
+
+    });
+});
+
+// Get all the buy orders
+app.get('/buyOrders', function (request, response) {
+    BuyOrders.find(function (error, buyOrders) {
+        if (error) response.send(error);
+        response.json({BuyOrders: buyOrders});
+    });
+});
+
+// Get all teh sale orders
+app.get('saleOrders', function (request, response) {
+    SaleOrders.find(function (error, saleOrders) {
+        if (error) response.send(error);
+        response.json({saleOrders: saleOrders});
+    });
+});
+
+// Create a buy orders
+app.post('buyOrders', function (request, response) {
+    var buyOrder = new BuyOrders (request.body.buyOrder);
+
+    // save the buyOrder
+    buyOrder.save(function (error) {
+        if (error) response.send(error);
+        response.status(201).json({BuyOrders: buyOrder});
     });
 });
 
