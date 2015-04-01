@@ -1,0 +1,30 @@
+<p style="text-align: center;"><b>Market by Price<br>{{companyName}}</b></p>
+
+<table>
+    <thead style="background-color:lightgray">
+    <tr>
+        <th width="250" colspan="3" style="text-align: center;">Buy<br>
+            # &emsp; &emsp; Volume &emsp;&emsp; Price
+        </th>
+        <th width="250" colspan="3" style="text-align: center;">Sell<br>
+            Price &emsp; &emsp; Volume &emsp;&emsp; #
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {{#each order in marketByPriceGrid}}
+        <tr>
+            <td width="50">{{order.groupBuyCount}}</td>
+            <td width="100"> {{order.groupBuyVolume}}  </td>
+            <td width="100"> {{order.groupBuyPrice}} </td>
+            <td width="100"> {{order.groupSalePrice}} </td>
+            <td width="100"> {{order.groupSaleVolume}} </td>
+            <td width="50">{{order.groupSaleCount}}</td>
+        </tr>
+    {{/each}}
+
+    </tbody>
+</table>
+
+

@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="large-12 columns">
+
+        <ul class="button-group left">
+            <li><a href="#" class="button small" {{action "sortByVolume" }} >Most Active by Volume</a></li>
+            <li><a href="#" class="button small" {{action 'sortByGainers' }}>Gainers</a></li>
+            <li><a href="#" class="button small" {{action 'sortByLosers'}}>Losers</a></li>
+            <li> </li>
+            <li><a href="#" class="button small" {{action 'initSummary'}}>Register Companies</a></li>
+        </ul>
+    </div>
+
+    <div class="large-12 columns" style="height: 300px; overflow: scroll;">
+        <table>
+            <thead style="background-color:lightgray">
+            <tr>
+                <th width="250" rowspan="2">Company Name</th>
+                <th width="100" rowspan="2">Open<br>Price</th>
+                <th width="100" rowspan="2">Current<br>Price</th>
+                <th width="210" colspan="3" style="text-align: center;">Change<br>
+                    Value &emsp; - &emsp;&emsp;&emsp; %
+                </th>
+                <th width="150">Share Volume</th>
+                <th width="150"></th>
+            </tr>
+
+            </thead>
+            <tbody>
+            {{#each company in myModel}}
+                <tr>
+                    <td>{{#link-to 'marketDepth' company.id}}{{company.name}}{{/link-to}}</td>
+                    <td>{{#link-to 'marketDepth' company.id}}{{company.openPrice}}{{/link-to}}</td>
+                    <td> {{company.currentPrice}}   </td>
+                    <td width="80" style="text-align: center;">
+                        {{company.changeValue}}
+                    </td>
+                    <td width="50" style="text-align: center;">
+                        <img {{bind-attr src="company.changeIcon"}} alt="Icon">
+                    </td>
+                    <td width="80" style="text-align: center;">
+                        {{company.changePercentage}}%
+                    </td>
+                    <td>
+                        &emsp; {{company.shareVolume}}
+                    </td>
+                    <td class="stack-for-tiny round secondary button-group" style="text-align: center;">
+                        <li><a href="#" class="button tiny" {{action 'placeBid'  company.id}}>Buy</a></li>
+                        <li><a href="#" class="button tiny" {{action 'placeSale'  company.id}}>Sell</a></li>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+</div>

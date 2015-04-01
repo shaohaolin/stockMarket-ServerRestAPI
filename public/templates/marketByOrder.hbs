@@ -1,0 +1,27 @@
+<p style="text-align: center;"><b>Market by Order <br>{{companyName}}</b></p>
+
+<table>
+    <thead style="background-color:lightgray">
+    <tr>
+        <th width="200" colspan="2" style="text-align: center;">Buy<br>
+            Volume &emsp; Price
+        </th>
+        <th width="200" colspan="2" style="text-align: center;">Sell<br>
+            Price  &emsp; Volume
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each order in marketByOrderGrid}}
+        <tr>
+            <td width="100"> {{order.buySize}}  </td>
+            <td width="100"> {{order.buyPrice}} </td>
+            <td width="100"> {{order.sellPrice}} </td>
+            <td width="100"> {{order.sellSize}} </td>
+        </tr>
+    {{/each}}
+
+    </tbody>
+</table>
+
+
