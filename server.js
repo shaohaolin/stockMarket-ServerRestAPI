@@ -21,7 +21,7 @@ var buyOrderSchema = mongoose.Schema({
     timeStamp: Date,
     size: Number,
     price: Number,
-    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companys' }
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companies' }
 });
 
 // define saleOrder Schema
@@ -29,7 +29,7 @@ var saleOrderSchema = mongoose.Schema({
     timeStamp: Date,
     size: Number,
     price: Number,
-    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companys'}
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companies'}
 });
 
 //define transaction Schema
@@ -37,7 +37,7 @@ var transactionSchema = mongoose.Schema({
     timeStamp: Date,
     size: Number,
     price: Number,
-    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companys' }
+    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companies' }
 });
 
 //  define company Schema
@@ -125,8 +125,8 @@ app.post('/saleOrders', function (request, response) {
 });
 
 // Create a transcation
-app.post('/transcations', function (request, response) {
-    var transcation = new Transactions (request.body.saleOrder);
+app.post('/transactions', function (request, response) {
+    var transaction = new Transactions (request.body.transaction);
 
     // save the buyOrder
     transaction.save(function (error) {
