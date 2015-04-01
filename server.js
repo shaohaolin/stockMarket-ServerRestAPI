@@ -75,52 +75,6 @@ app.get('/companies', function (request, response) {
     });
 });
 
-// Create a company
-app.post('/companies', function (request, response) {
-    var company = new Companies (request.body.company);
-
-    // save the company
-    company.save(function (error) {
-        if (error) response.send(error);
-        response.status(201).json({Companies: company});
-    });
-});
-
-// Get a company with matching company_id
-app.get('/companies/:company_id', function(request, response) {
-    Companys.findById(request.params.company_id, function (error, company) {
-        if (error || !company) response.send(error);
-        response.json({companies: company});
-    });
-});
-
-// Update a company with new info.
-app.put('/companies/:company_id', function(request, response) {
-    Companies.findById(request.params.company_id, function(error, company) {
-        if (error) response.send(error);
-
-        //undate the company information
-        company.name = request.body.company.name;
-        company.symbolURL = request.body.company.symbolURL;
-        company.openPrice = request.body.company.openPrice;
-        company.currentPrice = request.body.company.currentPrice;
-        company.changeValue = request.body.company.changeValue;
-        company.changeIcon = request.body.company.changeIcon;
-        company.changeDirection = request.body.company.changeDirection;
-        company.shareVolume = request.body.company.shareVolume;
-        company.buyOrders = request.body.company.buyOrders;
-        company.saleOrders = request.body.company.saleOrders;
-        company.transaction = request.body.company.transactions;
-
-        // save the company information
-        company.save(function(error) {
-            if (error) response.send(error);
-            response.status(201).json({companies: company});
-        });
-
-    });
-});
-
 // Get all the buy orders
 app.get('/buyOrders', function (request, response) {
     BuyOrders.find(function (error, buyOrders) {
@@ -134,6 +88,17 @@ app.get('/saleOrders', function (request, response) {
     SaleOrders.find(function (error, saleOrders) {
         if (error) response.send(error);
         response.json({saleOrders: saleOrders});
+    });
+});
+
+// Create a company
+app.post('/companies', function (request, response) {
+    var company = new Companies (request.body.company);
+
+    // save the company
+    company.save(function (error) {
+        if (error) response.send(error);
+        response.status(201).json({Companies: company});
     });
 });
 
@@ -167,6 +132,63 @@ app.post('/transcations', function (request, response) {
     transaction.save(function (error) {
         if (error) response.send(error);
         response.status(201).json({Transactions: transaction});
+    });
+});
+
+// Update a company with new info.
+app.put('/companies/:company_id', function(request, response) {
+    Companies.findById(request.params.company_id, function(error, company) {
+        if (error) response.send(error);
+
+        //undate the company information
+        company.name = request.body.company.name;
+        company.symbolURL = request.body.company.symbolURL;
+        company.openPrice = request.body.company.openPrice;
+        company.currentPrice = request.body.company.currentPrice;
+        company.changeValue = request.body.company.changeValue;
+        company.changeIcon = request.body.company.changeIcon;
+        company.changeDirection = request.body.company.changeDirection;
+        company.shareVolume = request.body.company.shareVolume;
+        company.buyOrders = request.body.company.buyOrders;
+        company.saleOrders = request.body.company.saleOrders;
+        company.transaction = request.body.company.transactions;
+
+        // save the company information
+        company.save(function(error) {
+            if (error) response.send(error);
+            response.status(201).json({companies: company});
+        });
+
+    });
+});
+
+// Delete a buy order
+app.delete('/buyOrders/:buyOrder_id', function (request, response) {
+    BuyOrders.remove({
+        _id: request.params.buyOrder_id
+    }, function(error, buyOrder) {
+        if (error) response.send(err);
+        response.status(201).json({BuyOrders: buyOrder});
+    });
+
+});
+
+// Delete a sale order
+app.delete('/saleOrders/:saleOrder_id', function (request, response) {
+    SaleOrders.remove({
+        _id: request.params.saleOrder_id
+    }, function(error, saleOrder) {
+        if (error) response.send(err);
+        response.status(201).json({SaleOrders: saleOrder});
+    });
+
+});
+
+// Get a company with matching company_id
+app.get('/companies/:company_id', function(request, response) {
+    Companys.findById(request.params.company_id, function (error, company) {
+        if (error || !company) response.send(error);
+        response.json({companies: company});
     });
 });
 
