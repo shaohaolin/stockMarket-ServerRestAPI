@@ -150,6 +150,7 @@ app.post('/transactions', function (request, response) {
         company.transactions.push(transaction);
         company.save();
     });
+
     // save the buyOrder
     transaction.save(function (error) {
         if (error) response.send(error);
