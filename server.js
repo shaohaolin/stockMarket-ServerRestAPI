@@ -51,9 +51,9 @@ var companySchema = mongoose.Schema({
     changePercentage: { type: Number, default: 0 },
     changeDirection: { type: Number, default: 0 },
     shareVolume: { type: Number, default: 0 },
-    buyOrders: [buyOrderSchema], 
-    saleOrders: [saleOrderSchema],
-    transactions: [transactionSchema] //to save the transaction when we find a deal
+    buyOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BuyOrders' }], 
+    saleOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SaleOrders' }],
+    transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transactions' }] //to save the transaction when we find a deal
 });
 
 /* compile company model - instances of models are document.
@@ -105,6 +105,14 @@ app.post('/companies', function (request, response) {
 // Create a buy orders
 app.post('/buyOrders', function (request, response) {
     var buyOrder = new BuyOrders (request.body.buyOrder);
+    //console.log(request.body);
+    //console.log(request.body.buyOrder.company);
+
+    Companies.findById(request.body.buyOrder.company, function (error, company) {
+        if (error) response.send(error);
+        company.buyOrders.push(buyOrder);
+        company.save();
+    });
 
     // save the buyOrder
     buyOrder.save(function (error) {
@@ -116,6 +124,14 @@ app.post('/buyOrders', function (request, response) {
 // Create a sale orders
 app.post('/saleOrders', function (request, response) {
     var saleOrder = new SaleOrders (request.body.saleOrder);
+    //console.log(request.body);
+    //console.log(request.body.saleOrder.company);
+
+    Companies.findById(request.body.saleOrder.company, function (error, company) {
+        if (error) response.send(error);
+        company.saleOrders.push(saleOrder);
+        company.save();
+    });
 
     // save the buyOrder
     saleOrder.save(function (error) {
@@ -126,8 +142,14 @@ app.post('/saleOrders', function (request, response) {
 
 // Create a transcation
 app.post('/transactions', function (request, response) {
+    console.log(request.body);
     var transaction = new Transactions (request.body.transaction);
 
+    Companies.findById(request.body.transaction.company, function (error, company) {
+        if (error) response.send(error);
+        company.transactions.push(transaction);
+        company.save();
+    });
     // save the buyOrder
     transaction.save(function (error) {
         if (error) response.send(error);
@@ -137,21 +159,20 @@ app.post('/transactions', function (request, response) {
 
 // Update a company with new info.
 app.put('/companies/:company_id', function(request, response) {
+
     Companies.findById(request.params.company_id, function(error, company) {
         if (error) response.send(error);
-
+        //console.log(company);
         //undate the company information
-        company.name = request.body.company.name;
-        company.symbolURL = request.body.company.symbolURL;
-        company.openPrice = request.body.company.openPrice;
         company.currentPrice = request.body.company.currentPrice;
         company.changeValue = request.body.company.changeValue;
         company.changeIcon = request.body.company.changeIcon;
+        company.changePercentage = request.body.company.changePercentage;
         company.changeDirection = request.body.company.changeDirection;
         company.shareVolume = request.body.company.shareVolume;
-        company.buyOrders = request.body.company.buyOrders;
-        company.saleOrders = request.body.company.saleOrders;
-        company.transaction = request.body.company.transactions;
+        //company.buyOrders = request.body.company.buyOrders;
+        //company.saleOrders = request.body.company.saleOrders;
+        //company.transaction = request.body.company.transactions;
 
         // save the company information
         company.save(function(error) {
